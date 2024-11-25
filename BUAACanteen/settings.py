@@ -64,8 +64,6 @@ INSTALLED_APPS = [
     'application.user',
     'application.cafeteria',
     'application.post',
-
-    'application.testapp'
 ]
 
 MIDDLEWARE = [
@@ -78,7 +76,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'xiaolanshu.urls'
+ROOT_URLCONF = 'BUAACanteen.urls'
 
 TEMPLATES = [
     {
@@ -96,7 +94,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'xiaolanshu.wsgi.application'
+WSGI_APPLICATION = 'BUAACanteen.wsgi.application'
 
 
 # Database
@@ -218,8 +216,4 @@ HAYSTACK_CONNECTIONS = {
 #         'INDEX_NAME': 'haystack',
 #     },
 # }
-
-
-# AI
-AI_API_KEY = config['ai_api_key']
 
