@@ -1,11 +1,20 @@
-# database
+# database: local-postgreSQL
+#database:
+#  engine: 'django.db.backends.postgresql'
+#  name: 'toryn_canteen'
+#  host: 'localhost'
+#  port: '5432'
+#  user: 'toryn'
+#  password: '214934'
+
+# database: server-mysql
 database:
-  engine: 'django.db.backends.postgresql'
-  name: 'toryn_canteen'
-  host: 'localhost'
-  port: '5432'
-  user: 'toryn'
-  password: '214934'
+  engine: 'django.db.backends.mysql'
+  name: 'h_db21375077'
+  host: '120.46.3.97'
+  port: '3306'
+  user: 'u21375077'
+  password: 'Aa686659'
 
 
 # aliyun oss
