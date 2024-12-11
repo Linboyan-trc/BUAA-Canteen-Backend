@@ -211,11 +211,11 @@ def get_all_posts(request: HttpRequest):
 
 ################################################################################
 
-def get_recommended_posts(offset=0, limit=10, is_breakfast=False):
+def get_recommended_posts(offset=0, limit=12):
     offset = int(offset)
     limit = int(limit)
 
-    # 获取推荐的帖子
+    # 获取推荐的帖子:收藏 > 吃过 > 评论数量
     recommended_posts = Post.objects \
         .annotate(collect_count=Count('collected_by'), eat_count=Count('eaten_by')) \
         .annotate(comment_count=Count('comments')) \
@@ -228,22 +228,13 @@ def get_recommended_posts(offset=0, limit=10, is_breakfast=False):
                                       reverse=True)
 
     # 取出高赞的帖子75个，剩下的都是低赞，打乱顺序返回，保证高赞的在低赞前面
-    high = []
-    if is_breakfast:
-        counter = Counter.objects.get(id=36)
-        dishes = Dish.objects.filter(counter=counter)
-        for dish in dishes:
-            posts = Post.objects.filter(dish=dish)
-            for post in posts:
-                high.append(post)
-    else:
-        high = sorted_recommended_posts[:75]
-    low = sorted_recommended_posts[75:]
+    high = sorted_recommended_posts[:6]
+    low = sorted_recommended_posts[6:]
 
     random.shuffle(high)
     random.shuffle(low)
 
-    sorted_recommended_posts = high[:10] + low
+    sorted_recommended_posts = high[:6] + low
 
     # 返回指定范围内的推荐帖子
     return sorted_recommended_posts[offset:offset + limit]
@@ -257,13 +248,9 @@ def get_recommend(request: HttpRequest):
 
     offset = int(offset)
 
-    limit = 20
+    limit = 12
 
-    # 如果是早上，则推荐早餐帖子
-    if 6 <= datetime.now().hour < 10:
-        recommended_posts = get_recommended_posts(offset, limit, True)
-    else:
-        recommended_posts = get_recommended_posts(offset, limit)
+    recommended_posts = get_recommended_posts(offset, limit)
 
     return success_api_response({
         'posts': [{

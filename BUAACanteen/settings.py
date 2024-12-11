@@ -173,7 +173,7 @@ SIMPLEUI_INDEX = 'http://localhost:5173/'
 SIMPLEUI_HOME_INFO = False
 SIMPLEUI_ANALYSIS = False
 
-SIMPLEUI_LOGO = ('https://buaaxiaolanshu.oss-cn-beijing.aliyuncs.com/static/logo-admin.svg')
+SIMPLEUI_LOGO = ('https://buaaxiaolanshu.oss-cn-beijing.aliyuncs.com/media/avatar/BUAA-Canteen_20241123024650.png')
 
 
 # CORS
