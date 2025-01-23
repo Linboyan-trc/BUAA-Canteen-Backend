@@ -6,12 +6,10 @@
 
 import re
 from django.views.decorators.http import require_POST, require_http_methods, require_GET
-from django.conf import settings
-from openai import OpenAI
 
 from ..models import User, CafeteriaCollection, CounterCollection, PostCollection, EatCollection
 from ...post.models import Post
-from ...cafeteria.models import Counter, Cafeteria, Dish
+from ...cafeteria.models import Counter, Cafeteria
 from .user_auth import jwt_auth
 from ...utils import *
 
@@ -326,7 +324,7 @@ def cancel_collect_cafeteria(request: HttpRequest):
 @response_wrapper
 @require_POST
 @jwt_auth()
-def eat(request: HttpRequest):
+def ate(request: HttpRequest):
     user = User.objects.filter(id=request.user.id).first()
 
     data = parse_request_data(request)

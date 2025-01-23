@@ -1,0 +1,24 @@
+# database
+database:
+  engine:
+  name:
+  host:
+  port:
+  user:
+  password:
+
+
+# aliyun oss
+oss:
+    oss_access_key_id:
+    oss_access_key_secret:
+    oss_end_point:
+    oss_bucket_name:
+    oss_bucket_alc_type:
+    oss_prefix_url:
+
+# secret
+django_secret_key: 'django-insecure-3an!c-fug2jf5vi%4(jt$bux$-%sq1d+=sfgjsmryee2sy@76)'
+
+# AI
+ai_api_key:

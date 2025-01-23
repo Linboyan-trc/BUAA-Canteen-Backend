@@ -73,18 +73,16 @@ def user_login(request: HttpRequest):
     if user is None:
         if User.objects.filter(email=email).exists():
             return failed_api_response(ErrorCode.CANNOT_LOGIN_ERROR, '密码错误')
-        else:
-            return failed_api_response(ErrorCode.CANNOT_LOGIN_ERROR, '邮箱不存在')
-    else:
-        if user.isDelete:
-            return failed_api_response(ErrorCode.CANNOT_LOGIN_ERROR, '用户已注销, 请联系管理员')
-        else:
-            token = create_access_token(user)
-            refresh_token = create_refresh_token(user)
-            return success_api_response({'message': '登录成功',
-                                         'username': user.username,
-                                         'token': token,
-                                         'refresh_token': refresh_token})
+        return failed_api_response(ErrorCode.CANNOT_LOGIN_ERROR, '邮箱不存在')
+
+    if user.isDelete:
+        return failed_api_response(ErrorCode.CANNOT_LOGIN_ERROR, '用户已注销, 请联系管理员')
+    token = create_access_token(user)
+    refresh_token = create_refresh_token(user)
+    return success_api_response({'message': '登录成功',
+                                 'username': user.username,
+                                 'token': token,
+                                 'refresh_token': refresh_token})
 
 
 # 3. 登出
@@ -187,12 +185,11 @@ def user_change_password(request: HttpRequest):
         return failed_api_response(ErrorCode.INVALID_REQUEST_ARGUMENT_ERROR, '原密码错误')
 
     # 2.7 设置用户密码为'new_password'
-    else:
-        user.set_password(new_password)
-        user.save()
+    user.set_password(new_password)
+    user.save()
 
-        # 2.8 返回响应
-        return success_api_response({'message': '密码修改成功'})
+    # 2.8 返回响应
+    return success_api_response({'message': '密码修改成功'})
 
 
 # 3. 修改用户信息
@@ -219,11 +216,10 @@ def user_change_info(request: HttpRequest):
         if username != user.username:
             if User.objects.filter(username=username).exists():
                 return failed_api_response(ErrorCode.INVALID_REQUEST_ARGUMENT_ERROR, '用户名已存在')
-            else:
-                pattern = r'^[0-9a-zA-Z_\-\u4e00-\u9fa5]{3,15}$'
-                if not re.match(pattern, username):
-                    return failed_api_response(ErrorCode.INVALID_REQUEST_ARGUMENT_ERROR,
-                                               '用户名需为5-15位字母、数字或下划线')
+            pattern = r'^[0-9a-zA-Z_\-\u4e00-\u9fa5]{3,15}$'
+            if not re.match(pattern, username):
+                return failed_api_response(ErrorCode.INVALID_REQUEST_ARGUMENT_ERROR,
+                                           '用户名需为5-15位字母、数字或下划线')
             user.username = username
 
     # 3.5 要求'email'不和其他用户重复

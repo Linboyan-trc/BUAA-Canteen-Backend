@@ -33,7 +33,7 @@ urlpatterns = [
     #################### 2. 收藏 ####################
     path('collect-cafeteria', collect_cafeteria, name='collect_cafeteria'),
     path('collect-counter', collect_counter, name='collect_counter'),
-    path('ate', eat, name='ate'),
+    path('ate', ate, name='ate'),
     path('collect-post', collect_post, name='collect_post'),
 
     #################### 3. 取消收藏 ####################

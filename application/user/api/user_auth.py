@@ -35,9 +35,9 @@ def refresh_token(request: HttpRequest):
         # 验证token，获得负载
         try:
             payload = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
-        except jwt.InvalidTokenError:
+        except jwt.InvalidTokenError as exc:
             print('token无效 in refresh_token')
-            raise jwt.InvalidTokenError
+            raise jwt.InvalidTokenError from exc
         # 检查token类型
         if payload.get('type') != 'refresh_token':
             raise jwt.InvalidTokenError
@@ -45,13 +45,13 @@ def refresh_token(request: HttpRequest):
         user_id = payload.get('user_id')
         try:
             user = User.objects.get(id=user_id)
-        except User.DoesNotExist:
-            raise jwt.InvalidTokenError
+        except User.DoesNotExist as exc:
+            raise jwt.InvalidTokenError from exc
         auth_id = payload.get('auth_id')
         try:
             auth = Auth.objects.get(id=auth_id)
-        except Auth.DoesNotExist:
-            raise jwt.InvalidTokenError
+        except Auth.DoesNotExist as exc:
+            raise jwt.InvalidTokenError from exc
         if auth is None or auth.user != user:
             raise jwt.InvalidTokenError
         if auth.expires_at < timezone.now():
@@ -76,9 +76,9 @@ def get_user(request) -> User | None:
             raise jwt.InvalidTokenError
         try:
             payload = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
-        except jwt.InvalidTokenError:
+        except jwt.InvalidTokenError as exc:
             print('token无效 in get_user')
-            raise jwt.InvalidTokenError
+            raise jwt.InvalidTokenError from exc
         if payload.get('type') != 'access_token':
             raise jwt.InvalidTokenError
         user_id = payload.get('user_id')
@@ -144,8 +144,7 @@ def create_refresh_token(user: User, refresh_token_delta: int = 7) -> str:
         'type': 'refresh_token',
         'auth_id': auth.id,
     }
-    refresh_token = jwt.encode(refresh_token_payload, settings.SECRET_KEY, algorithm='HS256')
-    if isinstance(refresh_token, bytes):
-        refresh_token = refresh_token.decode('utf-8')
-    return refresh_token
-
+    refreshed_token = jwt.encode(refresh_token_payload, settings.SECRET_KEY, algorithm='HS256')
+    if isinstance(refreshed_token, bytes):
+        refreshed_token = refreshed_token.decode('utf-8')
+    return refreshed_token
